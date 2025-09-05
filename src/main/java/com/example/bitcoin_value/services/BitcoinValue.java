@@ -1,6 +1,8 @@
 package com.example.bitcoin_value.services;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class BitcoinValue {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final ZoneId zone = ZoneId.of("America/Sao_Paulo");
 
     @Value("${bitcoin.api.url}")
     private String btcUrl;
@@ -32,13 +35,13 @@ public class BitcoinValue {
         this.btcRepository = btcRepository;
     }
 
-    @Scheduled(fixedRate = 216_000)
+    @Scheduled(fixedRate = 1_200_000)
     public void saveBitcoinValue(){
         ResponseEntity<String> response = restTemplate.getForEntity(btcUrl, String.class);
         try{
             Map<String,Map<String,Integer>> btcMap = mapper.readValue(response.getBody(), new TypeReference<Map<String,Map<String,Integer>>>(){});
             
-            BtcEntity entity = new BtcEntity(btcMap.get("bitcoin"),LocalDateTime.now());
+            BtcEntity entity = new BtcEntity(btcMap.get("bitcoin"),ZonedDateTime.now(zone).toLocalDateTime());
             btcRepository.save(entity);
             Console.log("Valores do bitcoin atualizados!");
         }catch(Exception ex){
