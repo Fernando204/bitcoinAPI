@@ -19,6 +19,8 @@ import com.example.bitcoin_value.utils.Console;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 @Component
 public class BitcoinValue {
     private final RestTemplate restTemplate = new RestTemplate();
@@ -36,6 +38,11 @@ public class BitcoinValue {
     }
 
     @Scheduled(fixedRate = 1_200_000)
+    @SchedulerLock(
+        name = "bitcoinPriceTask",
+        lockAtMostFor = "2m",   
+        lockAtLeastFor = "5s"   
+    )
     public void saveBitcoinValue(){
         ResponseEntity<String> response = restTemplate.getForEntity(btcUrl, String.class);
         try{
