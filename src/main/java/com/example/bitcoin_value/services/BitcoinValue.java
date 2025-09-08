@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -47,8 +48,7 @@ public class BitcoinValue {
         System.out.println("fazendo chamada da api");
         ResponseEntity<String> response = restTemplate.getForEntity(btcUrl, String.class);
         try{
-            Map<String,Object> btcMap = mapper.readValue(response.getBody(), new TypeReference<Map<String,Object>>(){});
-            btcMap.remove("symbol");
+            Map<String,Double> btcMap = mapper.readValue(response.getBody(), new TypeReference<Map<String,Double>>(){});
 
             BtcEntity entity = new BtcEntity(btcMap,ZonedDateTime.now(zone).toLocalDateTime());
             btcRepository.save(entity);

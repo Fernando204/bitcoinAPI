@@ -13,11 +13,11 @@ public class BtcEntity {
     @Id
     private String id;
 
-    Map<String,Object> btcMap;
+    Map<String,Double> btcMap;
     LocalDateTime data;
 
     public BtcEntity(){}
-    public BtcEntity(Map<String,Object> btcMap,LocalDateTime data){
+    public BtcEntity(Map<String,Double> btcMap,LocalDateTime data){
         this.btcMap = btcMap;
         this.data = data;
     }
@@ -28,10 +28,10 @@ public class BtcEntity {
     public void setData(LocalDateTime data) {
         this.data = data;
     }
-    public Map<String, Object> getBtcMap() {
+    public Map<String, Double> getBtcMap() {
         return btcMap;
     }
-    public void setBtcMap(Map<String, Object> btcMap) {
+    public void setBtcMap(Map<String, Double> btcMap) {
         this.btcMap = btcMap;
     }
 }

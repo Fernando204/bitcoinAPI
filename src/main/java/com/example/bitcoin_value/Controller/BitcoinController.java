@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bitcoin_value.Models.BtcEntity;
 import com.example.bitcoin_value.repositories.BtcRepository;
 
+import com.example.bitcoin_value.utils.Console;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +35,7 @@ public class BitcoinController {
     @GetMapping("/get")
     @CrossOrigin("*")
     public ResponseEntity<?> getBitcoinValues(@RequestParam String param) {
-        Map<String,Integer> responseMap = new HashMap<>();
+        Map<String,Double> responseMap = new HashMap<>();
         List<BtcEntity> valueList = btcRepository.findAll();
 
         switch (param) {
@@ -56,12 +57,13 @@ public class BitcoinController {
         }
     }
 
-    private Map<String,Integer> filterValues(List<BtcEntity> valueList,LocalDateTime minDate){
-        Map<String,Integer> responseMap = new HashMap<>();
+    private Map<String,Double> filterValues(List<BtcEntity> valueList,LocalDateTime minDate){
+        Map<String,Double> responseMap = new HashMap<>();
         valueList.stream()
                 .filter(v -> v.getData() != null && v.getData().isAfter(minDate))
                 .forEach(v ->{
-                    responseMap.put(v.getData().format(formatter),(int) v.getBtcMap().get("BTC"));
+                    Console.log(v.getBtcMap().get("BRL")+" R$");
+                    responseMap.put(v.getData().format(formatter),v.getBtcMap().get("BRL"));
                 });
 
         return  responseMap;
