@@ -3,6 +3,7 @@ package com.example.bitcoin_value.services;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,13 +44,15 @@ public class BitcoinValue {
         lockAtLeastFor = "5s"   
     )
     public void saveBitcoinValue(){
+        System.out.println("fazendo chamada da api");
         ResponseEntity<String> response = restTemplate.getForEntity(btcUrl, String.class);
         try{
-            Map<String,Map<String,Integer>> btcMap = mapper.readValue(response.getBody(), new TypeReference<Map<String,Map<String,Integer>>>(){});
-            
-            BtcEntity entity = new BtcEntity(btcMap.get("bitcoin"),ZonedDateTime.now(zone).toLocalDateTime());
+            Map<String,Object> btcMap = mapper.readValue(response.getBody(), new TypeReference<Map<String,Object>>(){});
+            btcMap.remove("symbol");
+
+            BtcEntity entity = new BtcEntity(btcMap,ZonedDateTime.now(zone).toLocalDateTime());
             btcRepository.save(entity);
-            Console.log("Valores do bitcoin atualizados!");
+            Console.log("Valores do bitcoin atualizados!  "+btcMap);
         }catch(Exception ex){
             Console.error("Erro ao atualizar valores do bitcoin "+ex.getMessage());
         }

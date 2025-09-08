@@ -61,7 +61,7 @@ public class BitcoinController {
         valueList.stream()
                 .filter(v -> v.getData() != null && v.getData().isAfter(minDate))
                 .forEach(v ->{
-                    responseMap.put(v.getData().format(formatter), v.getBtcMap().get("brl"));
+                    responseMap.put(v.getData().format(formatter),(int) v.getBtcMap().get("price"));
                 });
 
         return  responseMap;
