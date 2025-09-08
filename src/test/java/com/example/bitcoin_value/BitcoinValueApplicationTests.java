@@ -6,7 +6,7 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest
 @TestPropertySource(properties = {
-    "bitcoin.api.url=https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=brl"
+    "bitcoin.api.url=https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BRL"
 })
 class BitcoinValueApplicationTests {
 
