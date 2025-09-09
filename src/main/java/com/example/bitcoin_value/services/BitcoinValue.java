@@ -30,6 +30,8 @@ public class BitcoinValue {
 
     @Value("${bitcoin.api.url}")
     private String btcUrl;
+    @Value("${keepAlive.api.url}")
+    private String keepUrl;
 
 
     private BtcRepository btcRepository;
@@ -56,7 +58,12 @@ public class BitcoinValue {
         }catch(Exception ex){
             Console.error("Erro ao atualizar valores do bitcoin "+ex.getMessage());
         }
-        
+    }
+
+    @Scheduled(fixedRate =  10 * 60 * 1000)
+    public void keepOn(){
+        ResponseEntity<String> response = restTemplate.getForEntity(keepUrl, String.class);
+        Console.info(response.getBody());
     }
 
     @Scheduled(fixedRate = 86_400_000)
